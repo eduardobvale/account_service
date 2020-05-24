@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 2020_05_24_211834) do
     t.string "state"
     t.string "country"
     t.string "referral_code"
-    t.integer "status"
+    t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["cpf"], name: "index_accounts_on_cpf", unique: true

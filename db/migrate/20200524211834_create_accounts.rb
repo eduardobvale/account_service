@@ -10,7 +10,7 @@ class CreateAccounts < ActiveRecord::Migration[5.2]
       t.string :state
       t.string :country
       t.string :referral_code
-      t.integer :status
+      t.integer :status, default: 0
 
       t.timestamps
     end

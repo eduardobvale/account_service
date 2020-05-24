@@ -38,7 +38,7 @@ RSpec.describe Account, type: :model do
     end
   end
 
-   describe '#email' do
+  describe '#email' do
     it 'validates email format' do
       record = Account.new
       record.email = 'Test'
@@ -113,6 +113,5 @@ RSpec.describe Account, type: :model do
         expect(record.status).to eq "pending"
       end
     end
-
   end
 end

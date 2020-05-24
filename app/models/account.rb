@@ -9,14 +9,23 @@ class Account < ApplicationRecord
     if: proc { |record| record.gender.present? } 
   }
   before_validation :clear_cpf_string
-  before_save :set_status, :set_referral_code
+  before_save :set_status, :generate_referral_code
+
+  belongs_to :referrer, class_name: "Account", optional: true
+  has_many :referrals, class_name: "Account", foreign_key: :referrer_id
 
   enum status: {
     pending: 0,
     complete: 1
   }
 
-  def set_referral_code
+  def set_referrer(referral_code)
+    self.referrer = Account.find_by_referral_code(referral_code)
+    save!
+  end
+
+  private
+  def generate_referral_code
     if required_fields_are_set? && referral_code.blank?
       loop do
         self.referral_code = 8.times.map{rand(10)}.join
@@ -25,8 +34,6 @@ class Account < ApplicationRecord
     end
   end
 
-
-  private
   def required_fields_are_set?
     ['name','email','cpf','birth_date','gender','city','state','country'].all? {|field| self.read_attribute(field).present? }
   end

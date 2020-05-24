@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_24_211834) do
+ActiveRecord::Schema.define(version: 2020_05_24_232345) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,8 +28,11 @@ ActiveRecord::Schema.define(version: 2020_05_24_211834) do
     t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "referrer_id"
     t.index ["cpf"], name: "index_accounts_on_cpf", unique: true
     t.index ["referral_code"], name: "index_accounts_on_referral_code", unique: true
+    t.index ["referrer_id"], name: "index_accounts_on_referrer_id"
   end
 
+  add_foreign_key "accounts", "accounts", column: "referrer_id"
 end

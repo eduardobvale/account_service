@@ -48,7 +48,38 @@ RSpec.describe Account, type: :model do
       expect(record.errors[:email]).to include('is not a valid address')
     end
   end
-  
+
+  describe '#set_referrer' do
+    context 'when a referral code is informed' do
+      it 'sets the referrer for that account' do
+        first_account = Account.create!(
+          name: 'Jane Doe',
+          email: 'janedoe@example.com',
+          cpf: '307.578.490-75',
+          birth_date: Time.now,
+          gender: 'Female',
+          city: 'Pittsburgh',
+          state: 'Pennsylvania',
+          country: 'United States')
+
+        second_account = Account.create!(
+          name: 'John Doe',
+          email: 'johndoe@example.com',
+          cpf: '867.563.620-20',
+          birth_date: Time.now,
+          gender: 'Male',
+          city: 'Pittsburgh',
+          state: 'Pennsylvania',
+          country: 'United States')
+
+        second_account.set_referrer(first_account.referral_code)
+
+        expect(second_account.referrer).to eq first_account
+        expect(first_account.referrals).to eq [second_account]
+      end
+    end
+  end
+
   describe '#save' do
     context 'when all fields are set and valid' do
       subject(:record) do
@@ -82,5 +113,6 @@ RSpec.describe Account, type: :model do
         expect(record.status).to eq "pending"
       end
     end
+
   end
 end

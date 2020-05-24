@@ -48,29 +48,39 @@ RSpec.describe Account, type: :model do
       expect(record.errors[:email]).to include('is not a valid address')
     end
   end
+  
+  describe '#save' do
+    context 'when all fields are set and valid' do
+      subject(:record) do
+        record = Account.new(
+          name: 'Jane Doe',
+          email: 'janedoe@example.com',
+          cpf: '307.578.490-75',
+          birth_date: Time.now,
+          gender: 'Female',
+          city: 'Pittsburgh',
+          state: 'Pennsylvania',
+          country: 'United States')
+        record.save!
+        record
+      end
 
-  describe 'when all fields are set and valid' do
-    it 'sets status as complete' do
-      record = Account.new(
-        name: 'Jane Doe',
-        email: 'janedoe@example.com',
-        cpf: '307.578.490-75',
-        birth_date: Time.now,
-        gender: 'Female',
-        city: 'Pittsburgh',
-        state: 'Pennsylvania',
-        country: 'United States')
-      record.save!
+      it 'sets status as complete' do
+        expect(record.status).to eq "complete"
+      end
 
-      expect(record.status).to eq "complete"
+      it 'generates a referral code' do
+        expect(record.referral_code).not_to be_nil
+        expect(record.referral_code.length).to eq 8
+      end
     end
-  end
 
-  describe 'when some fields are set' do
-    it 'sets status as pending' do
-      record = Account.new(cpf: '307.578.490-75')
-      record.save!
-      expect(record.status).to eq "pending"
+    context 'when some fields are set' do
+      it 'sets status as pending' do
+        record = Account.new(cpf: '307.578.490-75')
+        record.save!
+        expect(record.status).to eq "pending"
+      end
     end
   end
 end

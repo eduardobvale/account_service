@@ -1,6 +1,7 @@
 class Account < ApplicationRecord
   validates_cpf_format_of :cpf
   validates_email_format_of :email, if: proc { |record| record.email.present? }
+  validates :referral_code, uniqueness: true, if: proc { |record| record.referral_code.present? }
   validates :cpf, presence: true, uniqueness: true
   validates :gender, inclusion: { 
     in: ['Male', 'Female', 'Prefer not to answer'],
@@ -8,13 +9,22 @@ class Account < ApplicationRecord
     if: proc { |record| record.gender.present? } 
   }
   before_validation :clear_cpf_string
-
-  before_save :set_status
+  before_save :set_status, :set_referral_code
 
   enum status: {
     pending: 0,
     complete: 1
   }
+
+  def set_referral_code
+    if required_fields_are_set? && referral_code.blank?
+      loop do
+        self.referral_code = 8.times.map{rand(10)}.join
+        break unless self.class.exists?(referral_code: referral_code)
+      end
+    end
+  end
+
 
   private
   def required_fields_are_set?

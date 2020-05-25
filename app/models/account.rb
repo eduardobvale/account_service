@@ -1,4 +1,12 @@
 class Account < ApplicationRecord
+  # Encryption
+  encrypts :name
+  encrypts :email
+  encrypts :cpf
+  blind_index :cpf
+  encrypts :birth_date, type: :date
+  
+  # Validations
   validates_cpf_format_of :cpf
   validates_email_format_of :email, if: proc { |record| record.email.present? }
   validates :referral_code, uniqueness: true, if: proc { |record| record.referral_code.present? }
@@ -11,6 +19,7 @@ class Account < ApplicationRecord
   before_validation :clear_cpf_string
   before_save :set_status, :generate_referral_code
 
+  # Associations
   belongs_to :referrer, class_name: "Account", optional: true
   has_many :referrals, class_name: "Account", foreign_key: :referrer_id
 

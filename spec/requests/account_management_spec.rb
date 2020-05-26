@@ -2,6 +2,32 @@ require "rails_helper"
 require "ffaker"
 RSpec.describe "Account management", :type => :request do
 
+
+  describe "post /authenticate" do
+    subject(:cpf) { FFaker::IdentificationBR.cpf }
+      
+    context "When account doesnt exist with CPF" do
+      it "account is created" do
+        post "/authenticate", :params => { :cpf => cpf }
+
+        response_json = JSON.parse(response.body)
+        expect(response_json["auth_token"]).not_to be_blank
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context "When CPF is invalid" do
+      it "returns an error" do
+        post "/authenticate", :params => { :cpf => "123" }
+
+        response_json = JSON.parse(response.body)
+
+        expect(response_json["error"]["cpf"]).not_to be_blank
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
   describe "put /account" do
 
     subject(:cpf) { FFaker::IdentificationBR.cpf }

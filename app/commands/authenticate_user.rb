@@ -6,7 +6,11 @@ class AuthenticateUser
   end
 
   def call
-    JsonWebToken.encode(account_id: account.id) if account
+    if account
+      JsonWebToken.encode(account_id: account.id) 
+    else
+      errors.add(:cpf, 'is not a valid CPF')
+    end
   end
 
   private
@@ -14,6 +18,8 @@ class AuthenticateUser
   attr_accessor :cpf
 
   def account
-    Account.find_or_create_by(cpf: cpf)
+    if CPF.valid?(cpf)
+      Account.find_or_create_by!(cpf: cpf)
+    end
   end
 end

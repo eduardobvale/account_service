@@ -3,20 +3,20 @@ class AccountsController < ApplicationController
 
   def update
     if @current_account.update(accounts_params)
-      render :json => { status: @current_account.status, referral_code: @current_account.referral_code }
+      render :update, status: :ok
     else
       render :json => @current_account.errors.full_messages.to_json, status: :unprocessable_entity
     end
   end
 
   def referrals
-    render json: @current_account
+    @referrals = @current_account.referrals
+    render :referrals, status: :ok
   end
-
 
   private
 
   def accounts_params
-    params.fetch(:account).permit(:name, :email, :birth_date, :gender, :city, :state, :country)
+    params.fetch(:account).permit(:name, :email, :birth_date, :gender, :city, :state, :country, :referrer_code)
   end
 end

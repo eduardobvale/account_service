@@ -46,12 +46,39 @@ RSpec.describe "Account management", :type => :request do
   end
 
   describe "get /account/referrals" do
-    subject(:cpf) { FFaker::IdentificationBR.cpf }
-    subject(:headers) { get_authentication_headers(cpf) }
 
     it "returns a success code" do
+        cpf = FFaker::IdentificationBR.cpf
+        headers = get_authentication_headers(cpf)
+        
+        first_account = Account.where(cpf: cpf).first
+
+        first_account.update(
+          name: FFaker::Internet.email,
+          email: FFaker::Internet.email,
+          birth_date: FFaker::Time.date,
+          gender: FFaker::Gender.binary.capitalize,
+          city: FFaker::AddressUS.city,
+          state: FFaker::AddressUS.state,
+          country: FFaker::AddressUS.country)
+
+
+        second_account = Account.create!(
+          cpf: FFaker::IdentificationBR.cpf,
+          name: FFaker::Internet.email,
+          email: FFaker::Internet.email,
+          birth_date: FFaker::Time.date,
+          gender: FFaker::Gender.binary.capitalize,
+          city: FFaker::AddressUS.city,
+          state: FFaker::AddressUS.state,
+          country: FFaker::AddressUS.country,
+          referrer_code: first_account.referral_code)
+
+
       get "/account/referrals", :headers => headers
 
+      response_json = JSON.parse(response.body)
+      expect(response_json.map{|account| account["id"]}).to include(second_account.id)
       expect(response).to have_http_status(:ok)
     end
   end

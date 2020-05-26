@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_25_001209) do
+ActiveRecord::Schema.define(version: 2020_05_26_012308) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 2020_05_25_001209) do
     t.text "cpf_ciphertext"
     t.text "birth_date_ciphertext"
     t.string "cpf_bidx"
+    t.string "referrer_code"
     t.index ["cpf_bidx"], name: "index_accounts_on_cpf_bidx", unique: true
     t.index ["referral_code"], name: "index_accounts_on_referral_code", unique: true
     t.index ["referrer_id"], name: "index_accounts_on_referrer_id"

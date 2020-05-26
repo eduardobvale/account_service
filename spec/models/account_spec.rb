@@ -49,7 +49,7 @@ RSpec.describe Account, type: :model do
     end
   end
 
-  describe '#set_referrer' do
+  describe '#referrer_code' do
     context 'when a referral code is informed' do
       it 'sets the referrer for that account' do
         first_account = Account.create!(
@@ -70,9 +70,8 @@ RSpec.describe Account, type: :model do
           gender: 'Male',
           city: 'Pittsburgh',
           state: 'Pennsylvania',
-          country: 'United States')
-
-        second_account.set_referrer(first_account.referral_code)
+          country: 'United States',
+          referrer_code: first_account.referral_code)
 
         expect(second_account.referrer).to eq first_account
         expect(first_account.referrals).to eq [second_account]

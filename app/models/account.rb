@@ -17,7 +17,7 @@ class Account < ApplicationRecord
     if: proc { |record| record.gender.present? } 
   }
   before_validation :clear_cpf_string
-  before_save :set_status, :generate_referral_code
+  before_save :set_status, :generate_referral_code, :set_referrer
 
   # Associations
   belongs_to :referrer, class_name: "Account", optional: true
@@ -28,12 +28,14 @@ class Account < ApplicationRecord
     complete: 1
   }
 
-  def set_referrer(referral_code)
-    self.referrer = Account.find_by_referral_code(referral_code)
-    save!
-  end
 
   private
+  def set_referrer
+    if referrer_code.present?
+      self.referrer = Account.find_by_referral_code(referrer_code)
+    end
+  end
+
   def generate_referral_code
     if required_fields_are_set? && referral_code.blank?
       loop do

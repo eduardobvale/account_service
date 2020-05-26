@@ -52,3 +52,8 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem "lockbox", "~> 0.4.2"
 
 gem "blind_index", "~> 2.0"
+
+
+gem "simple_command", "~> 0.1.0"
+
+gem "jwt", "~> 2.2"

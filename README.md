@@ -2,11 +2,11 @@
 
 This is an account opening service focused on protecting 'Sensitive Data' through the process. Client applications must authenticate with a valid Brazilian Identification (CPF) then use the bearer JWT to update account information. Only a complete account will have a referral code.
 
-A especific authentication with JWT was built so the user can authenticate only with a valid CPF, there is no focus on email, password and email confirmations workflows (Reference used https://www.pluralsight.com/guides/token-based-authentication-with-ruby-on-rails-5-api).
+An specific authentication with JWT was built so the user can authenticate only with a valid CPF, there is no focus on email, password and email confirmations workflows (Reference used https://www.pluralsight.com/guides/token-based-authentication-with-ruby-on-rails-5-api).
 
-A symmetric encryption and https://github.com/ankane/lockbox was chosen so data can retrieved easier, but its important to set up a strong secret key when in production environment (Use lockbox generator Lockbox.generate_key).
+Symmetric encryption and https://github.com/ankane/lockbox was chosen so data can be retrieved easier, but its important to set up a strong secret key when in a production environment (Use lockbox generator Lockbox.generate_key).
 
-Since Identification needs to unique but we also need to encrypt data, https://github.com/ankane/blind_index was used to allow using rails validators, the strategy used by this gem allows an attacker reading the database to identify repeated values, since we only wanted to use the gem on a unique field, this is not a problem.
+Since Identification needs to unique but we also need to encrypt data, https://github.com/ankane/blind_index was used to allow using rails validators, the strategy used by this gem allows an attacker reading the database to identify repeated values since we only wanted to use the gem on a unique field, this is not a problem.
 
 All validations were made using Active Record attr validators, easier to extend and avoid changes in the controller.
 

@@ -36,6 +36,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 4.0.0'
   gem 'shoulda-matchers'
   gem 'dotenv-rails'
+  gem "ffaker", "~> 2.15"
 end
 
 group :development do
@@ -52,7 +53,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem "lockbox", "~> 0.4.2"
 
 gem "blind_index", "~> 2.0"
-
 
 gem "simple_command", "~> 0.1.0"
 
